@@ -2,10 +2,10 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <cambalache-project version="0.10.3" target_tk="gtk-4.0">
   <ui>
-	(1,None,"risiupgrade.ui","risiUpgrade.ui","risiOS Upgrade Tool			",None,None,None,None,None)
+	(1,2,"risiupgrade.ui","risiUpgrade.ui","risiOS Upgrade Tool			",None,None,None,None,None)
   </ui>
   <object>
-	(1,2,"AdwApplicationWindow","window",None,None,None,None,None),
+	(1,2,"AdwApplicationWindow","RisiUpgradeWindow",None,None,None,None,None),
 	(1,5,"AdwFlap",None,2,None,None,None,1),
 	(1,6,"GtkStackSwitcher",None,5,None,None,None,None),
 	(1,7,"GtkStack",None,5,None,None,None,1),

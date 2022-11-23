@@ -1,6 +1,7 @@
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::{gio, glib};
+use log::error;
 
 use crate::application::RisiUpgrade;
 
@@ -44,22 +45,26 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
 
-            self.backup_button.connect_clicked(|_| {
+            self.backup_button.connect_clicked(move |_| {
                 // Temporary fix
-                let _ = Exec::cmd("deja-dup")
-                    .communicate()
-                    .expect("Failed to run deja-dup");
+                if let Ok(_) = Exec::cmd("deja-dup").communicate() {
+                    // Do things with the Communicator
+                } else {
+                    error!("Could not launch Deja Dup. Maybe open an error dialog?");
+                }
             });
 
-            let carousel = self.carousel.clone();
+            let obj = self.obj().clone();
             self.next_button.connect_clicked(move |_| {
-                carousel.scroll_to(&carousel.nth_page((carousel.position() + 1.0) as u32), true);
+                obj.move_carousel_page(1);
             });
 
-            let carousel = self.carousel.clone();
+            let obj = self.obj().clone();
             self.back_button.connect_clicked(move |_| {
-                carousel.scroll_to(&carousel.nth_page((carousel.position() - 1.0) as u32), true);
+                obj.move_carousel_page(-1);
             });
+
+            self.obj().set_button_state(self.carousel.position() as i32);
         }
     }
 
@@ -81,5 +86,38 @@ glib::wrapper! {
 impl RisiUpgradeWindow {
     pub fn new(app: &RisiUpgrade) -> Self {
         glib::Object::new(&[("application", app)])
+    }
+
+    pub fn move_carousel_page(&self, page_delta: i32) {
+        let obj = self.imp();
+        let current_page = obj.carousel.position() as i32;
+        let pages = obj.carousel.n_pages() as i32;
+        let new_page = (current_page + page_delta + pages) % pages;
+
+        obj.carousel
+            .scroll_to(&obj.carousel.nth_page(new_page.try_into().unwrap()), true);
+
+        self.set_button_state(new_page);
+    }
+
+    /// Show or hide navigation buttons based on the current position
+    pub fn set_button_state(&self, page: i32) {
+        let obj = self.imp();
+
+        // Pages starts on 1, Position starts on 0
+        let pages = (obj.carousel.n_pages() as i32) - 1;
+        let current_page = page;
+
+        // Last page reached
+        if current_page == pages {
+            obj.next_button.set_visible(false);
+        // First page
+        } else if current_page == 0 {
+            obj.back_button.set_visible(false);
+        // Middle pages
+        } else if current_page < pages {
+            obj.next_button.set_visible(true);
+            obj.back_button.set_visible(true);
+        }
     }
 }

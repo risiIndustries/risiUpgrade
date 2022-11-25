@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.6" />
+  <requires lib="libadwaita" version="1.1" />
+  <template class="RisiUpgradeWindow" parent="AdwApplicationWindow">
+    <property name="title">risiUpgrade</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="AdwHeaderBar" id="headerbar">
+            <child type="title">
+              <object class="AdwWindowTitle">
+                <property name="title">Upgrade</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkStack" id="stack">
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">welcome</property>
+                <property name="child">
+                  <object class="Welcome" />
+                </property>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">upgrade</property>
+                <property name="child">
+                  <object class="Upgrader" />
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -3,10 +3,12 @@ use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 use log::{debug, info};
 
-use crate::config::{APP_ID, VERSION};
+use crate::config::{APP_ID, PROFILE, VERSION};
 use crate::window::RisiUpgradeWindow;
 
 mod imp {
+    use crate::widgets::init_widgets;
+
     use super::*;
     use glib::WeakRef;
     use once_cell::sync::OnceCell;
@@ -27,7 +29,7 @@ mod imp {
 
     impl ApplicationImpl for RisiUpgrade {
         fn activate(&self) {
-            debug!("GtkApplication<RisiUpgrade>::activate");
+            debug!("AdwApplication<RisiUpgrade>::activate");
             self.parent_activate();
             let app = self.instance();
 
@@ -46,7 +48,7 @@ mod imp {
         }
 
         fn startup(&self) {
-            debug!("GtkApplication<RisiUpgrade>::startup");
+            debug!("AdwApplication<RisiUpgrade>::startup");
             self.parent_startup();
             let app = self.instance();
 
@@ -56,6 +58,7 @@ mod imp {
 
             app.setup_gactions();
             app.setup_accels();
+            init_widgets();
         }
     }
 
@@ -97,7 +100,7 @@ impl RisiUpgrade {
 
     pub fn run(&self) {
         info!("risiUpdate ({})", APP_ID);
-        info!("Version: {}", VERSION);
+        info!("Version: {} {}", VERSION, PROFILE);
 
         ApplicationExtManual::run(self);
     }
@@ -108,6 +111,7 @@ impl Default for RisiUpgrade {
         glib::Object::new::<Self>(&[
             ("application-id", &APP_ID),
             ("flags", &gio::ApplicationFlags::empty()),
+            ("resource-base-path", &Some("/io/risi/Upgrade/")),
         ])
     }
 }

@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.6" />
+  <requires lib="libadwaita" version="1.1" />
+  <template class="Welcome" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkOverlay">
+        <property name="valign">fill</property>
+        <property name="vexpand">True</property>
+        <child>
+          <object class="AdwCarousel" id="carousel">
+            <property name="allow-long-swipes">True</property>
+            <property name="valign">center</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="AdwStatusPage" id="intro">
+                <property name="hexpand">True</property>
+                <property name="icon-name">software-update-available-symbolic</property>
+                <property name="title">risiOS Upgrade Tool</property>
+                <property name="description">36 → 37
+    
+    This tool will guide you through the
+    upgrade process.</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwStatusPage" id="backup">
+                <property name="hexpand">True</property>
+                <property name="icon-name">emblem-synchronizing-symbolic</property>
+                <property name="title">Backup</property>
+                <property name="description">We highly recommend a backup before continuing.
+    
+    risiIndustries is not responsible for any breakages that occur during an upgrade.</property>
+                <child>
+                  <object class="GtkButton" id="backup_button">
+                    <property name="halign">center</property>
+                    <property name="label">Open Backup Tool</property>
+                    <signal name="clicked" handler="open_backup_tool" />
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwStatusPage" id="warning">
+                <property name="hexpand">True</property>
+                <property name="icon-name">dialog-warning-symbolic</property>
+                <property name="title">Warning</property>
+                <property name="description">Make sure your PC is connected to the internet and doesn't lose power.</property>
+                <child>
+                  <object class="GtkButton" id="start_upgrade">
+                    <property name="halign">center</property>
+                    <property name="label">Start Upgrade</property>
+                    <signal name="clicked" handler="start_upgrade" />
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkButton" id="back_button">
+            <property name="accessible-role">menu-item</property>
+            <property name="halign">start</property>
+            <property name="icon-name">go-previous-symbolic</property>
+            <property name="margin-start">5</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="flat" />
+              <class name="circular" />
+            </style>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkButton" id="next_button">
+            <property name="halign">end</property>
+            <property name="icon-name">go-next-symbolic</property>
+            <property name="margin-end">5</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="flat" />
+              <class name="circular" />
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwCarouselIndicatorDots">
+        <property name="carousel">carousel</property>
+        <property name="margin-bottom">5</property>
+        <property name="valign">start</property>
+      </object>
+    </child>
+  </template>
+</interface>

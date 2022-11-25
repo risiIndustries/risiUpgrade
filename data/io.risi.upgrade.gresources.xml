@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/io/risi/Upgrade/">
+        <file>window.ui</file>
+        <file>welcome.ui</file>
+        <file>upgrader.ui</file>
+    </gresource>
+</gresources>

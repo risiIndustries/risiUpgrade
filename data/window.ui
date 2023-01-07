@@ -32,7 +32,7 @@
               <object class="GtkStackPage">
                 <property name="name">upgrade</property>
                 <property name="child">
-                  <object class="Upgrader" />
+                  <object class="Upgrader" id="upgrader" />
                 </property>
               </object>
             </child>

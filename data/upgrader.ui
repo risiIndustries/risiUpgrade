@@ -5,16 +5,38 @@
   <template class="Upgrader" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkCenterBox" id="vte_box">
-        <property name="hexpand">True</property>
-        <property name="orientation">vertical</property>
-        <property name="vexpand">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkProgressBar">
-        <property name="show-text">True</property>
-        <property name="text">Upgrading System</property>
+      <object class="AdwClamp">
+        <property name="maximum-size">600</property>
+        <property name="tightening-threshold">400</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="AdwStatusPage">
+                <property name="icon-name">software-update-available-symbolic</property>
+                <property name="title">Upgrading...</property>
+                <property name="description">Do not turn off your computer</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwClamp">
+                <property name="maximum-size">200</property>
+                <property name="tightening-threshold">400</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="VteTerminal" id="vte">
+                    <property name="hexpand">True</property>
+                    <property name="input-enabled">False</property>
+                    <property name="cursor-blink-mode">off</property>
+                    <property name="cursor-shape">ibeam</property>
+                    <property name="scroll-on-output">True</property>
+                    <property name="audible-bell">False</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </template>

@@ -4,3 +4,4 @@ pub const APP_ID: &'static str = env!("APP_ID");
 pub const PROFILE: &'static str = env!("APP_PROFILE");
 pub const RESOURCES_FILE: &'static str = env!("RESOURCES_FILE");
 pub const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+pub const DATA_DIR: &'static str = env!("DATA_DIR");

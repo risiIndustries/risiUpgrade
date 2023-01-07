@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Test Application
+Comment=Description of what Test Application does
+Exec=gnome-test-application
+Icon=org.gnome.TestApplication
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;TestApplication Category;
+StartupNotify=true
+DBusActivatable=true
+X-GNOME-UsesNotifications=true

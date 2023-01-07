@@ -1,6 +1,6 @@
 use adw::prelude::*;
 
-use self::{welcome::Welcome, upgrader::Upgrader};
+use self::{upgrader::Upgrader, welcome::Welcome};
 
 pub mod upgrader;
 pub mod welcome;

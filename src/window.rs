@@ -11,7 +11,10 @@ mod imp {
     use adw::HeaderBar;
     use gtk::Stack;
 
-    use crate::config::{APP_ID, PROFILE};
+    use crate::{
+        config::{APP_ID, PROFILE},
+        widgets::upgrader::Upgrader,
+    };
 
     use super::*;
 
@@ -22,6 +25,8 @@ mod imp {
         pub headerbar: TemplateChild<HeaderBar>,
         #[template_child]
         pub stack: TemplateChild<Stack>,
+        #[template_child]
+        pub upgrader: TemplateChild<Upgrader>,
 
         pub settings: gio::Settings,
     }
@@ -31,6 +36,7 @@ mod imp {
             Self {
                 headerbar: TemplateChild::default(),
                 stack: TemplateChild::default(),
+                upgrader: TemplateChild::default(),
                 settings: gio::Settings::new(APP_ID),
             }
         }
@@ -93,19 +99,26 @@ impl RisiUpgradeWindow {
 
     fn setup_gactions(&self) {
         let action_navigate = gio::SimpleAction::new("navigate", Some(VariantTy::STRING));
+        let action_upgrade = gio::SimpleAction::new("upgrade", None);
 
-        let headerbar =  self.imp().headerbar.clone();
         let stack = self.imp().stack.clone();
         action_navigate.connect_activate(move |_, parameter| {
             if let Some(name) =
                 parameter.map(|p| p.str().expect("Parameter must be of type String"))
             {
-                headerbar.set_decoration_layout(Some(":minimize"));
                 stack.set_visible_child_name(name);
             }
         });
 
+        let headerbar = self.imp().headerbar.clone();
+        let upgrader = self.imp().upgrader.clone();
+        action_upgrade.connect_activate(move |_, _| {
+            headerbar.set_decoration_layout(Some(":minimize"));
+            upgrader.run();
+        });
+
         self.add_action(&action_navigate);
+        self.add_action(&action_upgrade);
     }
 
     fn save_window_size(&self) -> Result<(), glib::BoolError> {

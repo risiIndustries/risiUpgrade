@@ -99,7 +99,7 @@ impl RisiUpgrade {
     }
 
     pub fn run(&self) {
-        info!("risiUpdate ({})", APP_ID);
+        info!("risiUpgrade ({})", APP_ID);
         info!("Version: {} {}", VERSION, PROFILE);
 
         ApplicationExtManual::run(self);

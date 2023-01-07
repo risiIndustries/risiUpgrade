@@ -36,7 +36,7 @@
                   <object class="GtkButton" id="backup_button">
                     <property name="halign">center</property>
                     <property name="label">Open Backup Tool</property>
-                    <signal name="clicked" handler="open_backup_tool" />
+                    <signal name="clicked" handler="open_backup_tool" swapped="yes"/>
                   </object>
                 </child>
               </object>
@@ -51,7 +51,7 @@
                   <object class="GtkButton" id="start_upgrade">
                     <property name="halign">center</property>
                     <property name="label">Start Upgrade</property>
-                    <signal name="clicked" handler="start_upgrade" />
+                    <signal name="clicked" handler="start_upgrade" swapped="yes"/>
                   </object>
                 </child>
               </object>

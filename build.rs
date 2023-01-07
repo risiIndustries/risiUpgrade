@@ -6,6 +6,10 @@ use std::{
 
 use glib_build_tools::compile_resources;
 
+// APP CONFIGURATION
+const BASE_ID: &'static str = "io.risi.upgrade";
+const DATADIR: &'static str = "/usr/share/risiUpgrade";
+
 fn execute_cmd(cmd: &mut Command) {
     let cmd = cmd.output().expect("Failed to execute command");
 
@@ -16,14 +20,13 @@ fn execute_cmd(cmd: &mut Command) {
 }
 
 fn main() {
-    let base_id = "io.risi.upgrade";
     let out_dir = env::var("OUT_DIR").unwrap();
     let profile = env::var("PROFILE").unwrap();
     println!("cargo:rerun-if-changed=data");
 
     compile_resources(
         "data",
-        &format!("data/{}.gresources.xml", base_id),
+        &format!("data/{}.gresources.xml", BASE_ID),
         "resources.gresource",
     );
 
@@ -32,14 +35,15 @@ fn main() {
         out_dir
     );
 
+    println!("cargo:rustc-env=APP_ID={}", BASE_ID);
+    println!("cargo:rustc-env=DATA_DIR={}", DATADIR);
+
     if profile == "release" {
         println!("cargo:rustc-env=APP_PROFILE=release");
-        println!("cargo:rustc-env=APP_ID={}", base_id);
 
         println!("cargo:rustc-env=RUST_LOG=info");
     } else if profile == "debug" {
         println!("cargo:rustc-env=APP_PROFILE=development");
-        println!("cargo:rustc-env=APP_ID={}", base_id);
 
         println!("cargo:rustc-env=RUST_LOG=trace");
     }
@@ -47,7 +51,7 @@ fn main() {
     execute_cmd(
         Command::new("sudo")
             .arg("cp")
-            .arg(&format!("data/{}.gschema.xml", base_id))
+            .arg(&format!("data/{}.gschema.xml", BASE_ID))
             .arg("/usr/share/glib-2.0/schemas/"),
     );
 
@@ -60,7 +64,18 @@ fn main() {
     execute_cmd(
         Command::new("sudo")
             .arg("cp")
-            .arg(format!("data/{}.desktop", base_id))
+            .arg(format!("data/{}.desktop", BASE_ID))
             .arg("/usr/share/applications"),
     );
+
+    // This has to be done manually because cargo as root doesn't work well
+    execute_cmd(Command::new("sudo").arg("mkdir").arg("-p").arg(DATADIR));
+
+    execute_cmd(
+        Command::new("sudo")
+            .arg("cp")
+            .arg("data/upgrade.sh")
+            .arg(DATADIR),
+    );
 }
+

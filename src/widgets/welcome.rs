@@ -22,20 +22,36 @@ mod imp {
 
     #[template_callbacks]
     impl Welcome {
+        pub fn open_error(&self, title: &str, body: &str) {
+            let root = self.instance().clone();
+            let window = root.upcast::<gtk::Widget>().root().unwrap().downcast::<gtk::Window>().unwrap();
+
+            let dialog = adw::MessageDialog::new(Some(&window), Some(&format!("An error occurred: {}", title)), Some(body));
+
+            dialog.add_response("close", "Close");
+            dialog.set_close_response("close");
+
+            dialog.present();
+            error!("{}, {}", title, body);
+        }
+
         #[template_callback]
-        fn open_backup_tool(_: &Button) {
+        fn open_backup_tool(&self, _: &Button) {
             // Temporary fix
             if let Ok(_) = Exec::cmd("deja-dup").communicate() {
                 // Do things with the Communicator
             } else {
-                error!("Could not launch Deja Dup. Maybe open an error dialog?");
+                self.open_error("Could not launch Deja Dup", "Please make sure it's installed and available.");
             }
         }
 
         #[template_callback]
-        fn start_upgrade(btn: &Button) {
+        fn start_upgrade(&self, btn: &Button) {
             if let Err(err) = btn.activate_action("win.navigate", Some(&"upgrade".to_variant())) {
-                error!("Could not navigate to page: {}. Maybe open an error dialog?", err);
+                self.open_error("Could not navigate to page", &err.message);
+            }
+            if let Err(err) = btn.activate_action("win.upgrade", None) {
+                self.open_error("Could not initiate upgrade", &err.message);
             }
         }
 
